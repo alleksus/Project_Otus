@@ -19,7 +19,7 @@ exit
 yum install -y yum-utils rpm wget tar nano mc git expect openssh-server openssh-clients
 
 # клонирование репозитория
-git clone @ссылка на github@
+git clone git@github.com:alleksus/Project_Otus.git
 
 #установка nginx
 yum install -y epel-release 
@@ -27,8 +27,8 @@ yum install -y nginx
 
 #настройка
 
-cp @папка git@/config/nginx.conf /etc/nginx/
-cp @папка git@/config/default.conf /etc/nginx/conf.d/
+cp Project_Otus/config/nginx.conf /etc/nginx/
+cp Project_Otus/config/default.conf /etc/nginx/conf.d/
 
 systemctl enable --now nginx
 
@@ -37,8 +37,8 @@ yum install -y httpd
 
 #настройка
 
-cp -p @папка git@/config/httpd.conf /etc/httpd/conf.d/
-cp -R @папка git@/config/www /var/www/
+cp -p Project_Otus/config/httpd.conf /etc/httpd/conf/
+cp -R Project_Otus/config/www /var/www/
 
 systemctl enable --now httpd
 
@@ -74,7 +74,7 @@ send \"y\r\"
 expect eof
 ")
 
-cp @папка git@/config/my.cnf /etc/
+cp Project_Otus/config/my.cnf /etc/
 
 systemctl restart mysqld
 
@@ -131,7 +131,7 @@ chown -R prometheus:prometheus /etc/prometheus/consoles
 chown -R prometheus:prometheus /etc/prometheus/console_libraries
 chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
 
-cp @папка git@/config/prometheus.service /etc/systemd/system/prometheus.service
+cp Project_Otus/config/prometheus.service /etc/systemd/system/prometheus.service
 
 wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
 
@@ -140,7 +140,7 @@ mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
 chown prometheus:prometheus /usr/local/bin/node_exporter/
 chmod -R 700 /usr/local/bin/node_exporter/
 
-cp @папка git@/config/node_exporter.service /etc/systemd/system/node_exporter.service
+cp Project_Otus/config/node_exporter.service /etc/systemd/system/node_exporter.service
 
 systemctl enable --now prometheus
 systemctl enable --now node_exporter
@@ -149,21 +149,21 @@ systemctl enable --now node_exporter
 
 yum -y install java-openjdk-devel java-openjdk
 
-cd @папка git@/rpms
+cd /rpms
 rpm -i *.rpm
 
-cp @папка git@/config/jvm.options /etc/elasticsearch/jvm.options.d/jvm.options
+cp Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/jvm.options
 systemctl enable --now elasticsearch.service
 
-cp @папка git@/config/kibana.yml /etc/kibana/kibana.yml
+cp Project_Otus/config/kibana.yml /etc/kibana/kibana.yml
 systemctl enable --now kibana
 
-cp @папка git@/config/logstash.yml /etc/logstash/logstash.yml
-cp @папка git@/config/logstash-nginx-es.conf /etc/logstash/conf.d/logstash-nginx-es.conf
+cp Project_Otus/config/logstash.yml /etc/logstash/logstash.yml
+cp Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/logstash-nginx-es.conf
 
 systemctl restart logstash.service
 
-cp @папка git@/config/filebeat.yml /etc/filebeat/filebeat.yml
+cp Project_Otus/config/filebeat.yml /etc/filebeat/filebeat.yml
 
 systemctl enable --now filebeat
 systemctl restart nginx
