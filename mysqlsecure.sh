@@ -1,4 +1,4 @@
-#!/usr/bin/expect
+#!/usr/bin/expect -f
 
 User=root
 Pass=Otus_2022
@@ -12,13 +12,13 @@ MYSQL=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $13}')
 spawn mysql_secure_installation
 
 expect {
-             "Enter password for user root:" { send "$MYSQL\r"; exp_continue }
-             "New password:" { send "$Pass\r"; exp_continue }
-             "Re-enter new password:" { send "$Pass\r"; exp_continue }
-             "Change the password for root ? ((Press y|Y for Yes, any other key for No) :" { send "n\r"; exp_continue }
-			 "Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) :" { send "y\r"; exp_continue }
-             "Remove anonymous users? (Press y|Y for Yes, any other key for No) :" { send "y\r"; exp_continue }
-			 "Disallow root login remotely? (Press y|Y for Yes, any other key for No) :" { send "n\r"; exp_continue }
-             "Remove test database and access to it? (Press y|Y for Yes, any other key for No) :" { send "y\r"; exp_continue }
-             "Reload privilege tables now? (Press y|Y for Yes, any other key for No) :" { send "y\r"; exp_continue }
+             "Enter password for user root:" { send -- "$MYSQL\r" }
+             "New password:" { send -- "$Pass\r" }
+             "Re-enter new password:" { send -- "$Pass\r" }
+             "Change the password for root ? ((Press y|Y for Yes, any other key for No) :" { send -- "n\r" }
+			 "Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
+             "Remove anonymous users? (Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
+			 "Disallow root login remotely? (Press y|Y for Yes, any other key for No) :" { send -- "n\r" }
+             "Remove test database and access to it? (Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
+             "Reload privilege tables now? (Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
         }
