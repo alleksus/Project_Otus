@@ -24,7 +24,8 @@ rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
 yum --enablerepo=mysql80-community install mysql-community-server
 
-systemctl enable --now mysqld
+systemctl start mysqld
+systemctl enable mysqld
 
 sleep 10
 
@@ -43,7 +44,7 @@ expect "New password:"
 send "$Pass\r"
 expect "Re-enter new password:"
 send "$Pass\r"
-expect "Change the password for root ? ((Press y|Y for Yes, any other key for No) :"
+expect "Change the password for root ? ((Press y|Y for Yes, any other key for No) :")
 send "n\r"
 expect "Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) :"
 send "y\r"
@@ -56,7 +57,7 @@ send "y\r"
 expect "Reload privilege tables now? (Press y|Y for Yes, any other key for No) :"
 send "y\r"
 expect eof
-"))
+")
 
 echo "$SECURE_MYSQL"
 
