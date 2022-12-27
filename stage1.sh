@@ -56,7 +56,7 @@ send "y\r"
 expect "Reload privilege tables now? (Press y|Y for Yes, any other key for No) :"
 send "y\r"
 expect eof
-")
+"))
 
 echo "$SECURE_MYSQL"
 
