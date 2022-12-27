@@ -1,11 +1,9 @@
 #!binbash
 
 # установка доп ПО
-setenforce 0
-yum install -y yum-utils rpm wget tar nano mc git expect openssh-clients epel-release 
-
-# клонирование репозитория
-git clone @ссылка на github@
+firewall-cmd --permanent --add-port=3306
+systemctl restart firewalld
+yum install -y yum-utils rpm wget tar nano mc git expect
 
 #установка mysql
 
@@ -17,7 +15,6 @@ systemctl enable --now mysqld
 
 User=root
 Pass=Otus2022
-MYSQL=/usr/bin/mysql
 
 root_temp_pass=$(grep "A temporary password" /var/log/mysqld.log)
 echo "root_temp_pass: "$root_temp_pass
@@ -41,11 +38,9 @@ send \"y\r\"
 expect eof
 ")
 
-cp @папка git@/config/replica_my.cnf /etc/my.cnf
-
 systemctl restart mysqld
 
 sleep 10
 
-creat_user=`$MYSQL -u root -p -e "CREATE USER root@'%' IDENTIFIED BY 'Otus2022';"`
-privileges=`$MYSQL -u root -p -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"`
+mysql "-u$User" "-p$Pass" -e "CREATE USER root@'%' IDENTIFIED BY 'Otus2022';"
+mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
