@@ -26,14 +26,14 @@ yum --enablerepo=mysql80-community install mysql-community-server
 
 systemctl enable --now mysqld
 
-sleep 10
+sleep 15
 
 systemctl status mysqld
 
 #настройка
 
 root_temp_pass=$(grep "A temporary password" /var/log/mysqld.log)
-echo "root_temp_pass: "$root_temp_pass
+
 SECURE_MYSQL=$(expect -c "
 set timeout 1
 spawn mysql_secure_installation
