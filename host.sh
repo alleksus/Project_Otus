@@ -30,8 +30,8 @@ yum install -y nginx
 
 #настройка
 
-cp Project_Otus/config/nginx.conf /etc/nginx/
-cp Project_Otus/config/default.conf /etc/nginx/conf.d/
+cp -u Project_Otus/config/nginx.conf /etc/nginx/
+cp -u Project_Otus/config/default.conf /etc/nginx/conf.d/
 
 systemctl enable --now nginx
 
@@ -40,8 +40,8 @@ yum install -y httpd
 
 #настройка
 
-cp -p Project_Otus/config/httpd.conf /etc/httpd/conf/
-cp -R Project_Otus/config/www /var/www/
+cp -u Project_Otus/config/httpd.conf /etc/httpd/conf/
+cp -r Project_Otus/config/www /var/www/
 
 systemctl enable --now httpd
 
@@ -77,14 +77,11 @@ send \"y\r\"
 expect eof
 ")
 
-cp Project_Otus/config/my.cnf /etc/
+cp -u Project_Otus/config/my.cnf /etc/
 
 systemctl restart mysqld
 
-sleep 10 &
-sshpass -p $Pass $User@$Slave_Host
-systemctl restart mysqld
-exit
+sleep 10 
 
 mysql "-u$User" "-p$Pass" -e "CREATE USER root@'%' IDENTIFIED BY 'Otus2022';"
 mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
@@ -96,13 +93,18 @@ Master_Status=$(mysql "-u$User" "-p$Pass" -ANe "SHOW MASTER STATUS;" | awk '{pri
 Log_File=$(echo $Master_Status |cut -f1 -d ' ')
 Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
 
-scp $DUMP $Slave_Host:$DUMP >/dev/null 
+sshpass -p $Pass $User@$Slave_Host
+bash <(curl -Ls https://raw.githubusercontent.com/alleksus/Project_Otus/main/slave.sh)
 
-ssh root@$Slave_Host
 mysql "-u$User" "-p$Pass" -e "DROP DATABASE IF EXISTS $DB; CREAT DATABASE $DB;"
 mysql "-u$User" "-p$Pass" $DB < $DUMP
 
 mysql "-u$User" "-p$Pass" -e "STOP SLAVE; CHANGE MASTER TO MASTER_HOST='$Master_Host', MASTER_USER='$User', MASTER_PASSWORD='$Pass', MASTER_LOG_FILE='$Log_File', MASTER_LOG_POS='$Log_Pos'; START SLAVE;"
+
+exit
+
+systemctl restart mysqld
+
 exit
 
 #установка prometheus и node_exporter
@@ -122,8 +124,8 @@ chown prometheus:prometheus /var/lib/prometheus
 
 tar -zxvf prometheus-2.17.1.linux-amd64.tar.gz
 
-cp prometheus-2.17.1.linux-amd64/prometheus /usr/local/bin/
-cp prometheus-2.17.1.linux-amd64/promtool /usr/local/bin/
+cp -u prometheus-2.17.1.linux-amd64/prometheus /usr/local/bin/
+cp -u prometheus-2.17.1.linux-amd64/promtool /usr/local/bin/
 
 chown prometheus:prometheus /usr/local/bin/prometheus
 chown prometheus:prometheus /usr/local/bin/promtool
@@ -137,7 +139,7 @@ chown -R prometheus:prometheus /etc/prometheus/consoles
 chown -R prometheus:prometheus /etc/prometheus/console_libraries
 chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
 
-cp Project_Otus/config/prometheus.service /etc/systemd/system/prometheus.service
+cp -u Project_Otus/config/prometheus.service /etc/systemd/system/
 
 wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
 
@@ -146,7 +148,7 @@ mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
 chown prometheus:prometheus /usr/local/bin/node_exporter/
 chmod -R 700 /usr/local/bin/node_exporter/
 
-cp Project_Otus/config/node_exporter.service /etc/systemd/system/node_exporter.service
+cp -u Project_Otus/config/node_exporter.service /etc/systemd/system/
 
 systemctl enable --now prometheus
 systemctl enable --now node_exporter
@@ -155,21 +157,21 @@ systemctl enable --now node_exporter
 
 yum -y install java-openjdk-devel java-openjdk
 
-cd /rpms
+cd /root/rpms
 rpm -i *.rpm
 
-cp Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/jvm.options
+cp -u Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/
 systemctl enable --now elasticsearch.service
 
-cp Project_Otus/config/kibana.yml /etc/kibana/kibana.yml
+cp -u Project_Otus/config/kibana.yml /etc/kibana/
 systemctl enable --now kibana
 
-cp Project_Otus/config/logstash.yml /etc/logstash/logstash.yml
-cp Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/logstash-nginx-es.conf
+cp -u Project_Otus/config/logstash.yml /etc/logstash/
+cp -u Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/
 
 systemctl restart logstash.service
 
-cp Project_Otus/config/filebeat.yml /etc/filebeat/filebeat.yml
+cp -u Project_Otus/config/filebeat.yml /etc/filebeat/
 
 systemctl enable --now filebeat
 systemctl restart nginx

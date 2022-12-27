@@ -1,5 +1,9 @@
 #!binbash
 
+User=root
+Pass=Otus2022
+DUMP="/tmp/$DB-export.sql"
+
 # установка доп ПО
 firewall-cmd --permanent --add-port=3306
 systemctl restart firewalld
@@ -12,9 +16,6 @@ sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
 yum --enablerepo=mysql80-community install mysql-community-server
 
 systemctl enable --now mysqld
-
-User=root
-Pass=Otus2022
 
 root_temp_pass=$(grep "A temporary password" /var/log/mysqld.log)
 echo "root_temp_pass: "$root_temp_pass
@@ -46,3 +47,5 @@ sleep 10
 
 mysql "-u$User" "-p$Pass" -e "CREATE USER root@'%' IDENTIFIED BY 'Otus2022';"
 mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
+
+scp root@192.168.136.7:$DUMP $DUMP
