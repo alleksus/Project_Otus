@@ -30,8 +30,8 @@ yum install -y nginx
 
 #настройка
 
-cp -u Project_Otus/config/nginx.conf /etc/nginx/
-cp -u Project_Otus/config/default.conf /etc/nginx/conf.d/
+cp -u /root/Project_Otus/config/nginx.conf /etc/nginx/
+cp -u /root/Project_Otus/config/default.conf /etc/nginx/conf.d/
 
 systemctl enable --now nginx
 
@@ -40,8 +40,8 @@ yum install -y httpd
 
 #настройка
 
-cp -u Project_Otus/config/httpd.conf /etc/httpd/conf/
-cp -r Project_Otus/config/www /var/www/
+cp -u /root/Project_Otus/config/httpd.conf /etc/httpd/conf/
+cp -r /root/Project_Otus/config/www /var/www/
 
 systemctl enable --now httpd
 
@@ -77,7 +77,7 @@ send \"y\r\"
 expect eof
 ")
 
-cp -u Project_Otus/config/my.cnf /etc/
+cp -u /root/Project_Otus/config/my.cnf /etc/
 
 systemctl restart mysqld
 
@@ -139,7 +139,7 @@ chown -R prometheus:prometheus /etc/prometheus/consoles
 chown -R prometheus:prometheus /etc/prometheus/console_libraries
 chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
 
-cp -u Project_Otus/config/prometheus.service /etc/systemd/system/
+cp -u /root/Project_Otus/config/prometheus.service /etc/systemd/system/
 
 wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
 
@@ -148,30 +148,30 @@ mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
 chown prometheus:prometheus /usr/local/bin/node_exporter/
 chmod -R 700 /usr/local/bin/node_exporter/
 
-cp -u Project_Otus/config/node_exporter.service /etc/systemd/system/
+cp -u /root/Project_Otus/config/node_exporter.service /etc/systemd/system/
 
 systemctl enable --now prometheus
 systemctl enable --now node_exporter
 
 #установка elk
 
-yum -y install java-openjdk-devel java-openjdk
+yum install -y java-openjdk-devel java-openjdk
 
 cd /root/rpms
 rpm -i *.rpm
 
-cp -u Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/
+cp -u /root/Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/
 systemctl enable --now elasticsearch.service
 
-cp -u Project_Otus/config/kibana.yml /etc/kibana/
+cp -u /root/Project_Otus/config/kibana.yml /etc/kibana/
 systemctl enable --now kibana
 
-cp -u Project_Otus/config/logstash.yml /etc/logstash/
-cp -u Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/
+cp -u /root/Project_Otus/config/logstash.yml /etc/logstash/
+cp -u /root/Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/
 
 systemctl restart logstash.service
 
-cp -u Project_Otus/config/filebeat.yml /etc/filebeat/
+cp -u /root/Project_Otus/config/filebeat.yml /etc/filebeat/
 
 systemctl enable --now filebeat
 systemctl restart nginx
