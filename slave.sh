@@ -1,4 +1,4 @@
-#!binbash
+﻿#!binbash
 
 User=root
 Pass=Otus2022

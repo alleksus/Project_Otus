@@ -1,4 +1,4 @@
-#!binbash
+﻿#!binbash
 
 User=root
 Pass=Otus2022
@@ -35,7 +35,7 @@ yum install -y nginx
 
 systemctl enable --now nginx
 
-sleep 3
+sleep 3s
 
 #установка apache
 yum install -y httpd
@@ -47,7 +47,7 @@ yum install -y httpd
 
 systemctl enable --now httpd
 
-sleep 3
+sleep 3s
 
 #установка mysql
 
@@ -57,7 +57,7 @@ yum --enablerepo=mysql80-community install mysql-community-server
 
 systemctl enable --now mysqld
 
-sleep 10
+sleep 10s
 
 #настройка
 
@@ -87,7 +87,7 @@ expect eof
 
 systemctl restart mysqld
 
-sleep 10 
+sleep 10s
 
 mysql "-u$User" "-p$Pass" -e "CREATE USER root@'%' IDENTIFIED BY 'Otus2022';"
 mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
@@ -158,11 +158,11 @@ chmod -R 700 /usr/local/bin/node_exporter/
 
 systemctl enable --now prometheus
 
-sleep 3
+sleep 3s
  
 systemctl enable --now node_exporter
 
-sleep 3
+sleep 3s
 
 #установка elk
 
@@ -174,24 +174,24 @@ rpm -i *.rpm
 \cp -u /root/Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/
 systemctl enable --now elasticsearch.service
 
-sleep 10
+sleep 10s
 
 \cp -u /root/Project_Otus/config/kibana.yml /etc/kibana/
 systemctl enable --now kibana
 
-sleep 3
+sleep 3s
 
 \cp -u /root/Project_Otus/config/logstash.yml /etc/logstash/
 \cp -u /root/Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/
 
 systemctl restart logstash.service
 
-sleep 3
+sleep 3s
 
 \cp -u /root/Project_Otus/config/filebeat.yml /etc/filebeat/
 
 systemctl enable --now filebeat
 
-sleep 3
+sleep 3s
 
 systemctl restart nginx
