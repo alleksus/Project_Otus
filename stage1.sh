@@ -65,4 +65,3 @@ echo "$SECURE_MYSQL"
 chmod -R 755 /var/lib/mysql/
 
 systemctl restart mysqld
-
