@@ -38,3 +38,17 @@ systemctl enable --now nginx
 sleep 5
 
 systemctl status nginx
+
+#установка apache
+yum install -y httpd
+
+#настройка
+
+\cp -u /root/Project_Otus/config/httpd.conf /etc/httpd/conf/
+\cp -r /root/Project_Otus/config/www /var/www/
+
+systemctl enable --now httpd
+
+sleep 5
+
+systemctl status httpd
