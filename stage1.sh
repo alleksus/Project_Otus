@@ -1,4 +1,4 @@
-#!binbash
+#!/bin/bash
 
 User=root
 Pass=Otus2022
@@ -34,7 +34,3 @@ yum install -y nginx
 \cp -u /root/Project_Otus/config/default.conf /etc/nginx/conf.d/
 
 systemctl enable --now nginx
-
-sleep 3
-
-systemctl status nginx
