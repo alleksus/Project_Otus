@@ -34,3 +34,7 @@ yum install -y nginx
 \cp -u /root/Project_Otus/config/default.conf /etc/nginx/conf.d/
 
 systemctl enable --now nginx
+
+sleep 5
+
+systemctl status nginx
