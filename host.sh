@@ -30,20 +30,24 @@ yum install -y nginx
 
 #настройка
 
-cp -u /root/Project_Otus/config/nginx.conf /etc/nginx/
-cp -u /root/Project_Otus/config/default.conf /etc/nginx/conf.d/
+\cp -u /root/Project_Otus/config/nginx.conf /etc/nginx/
+\cp -u /root/Project_Otus/config/default.conf /etc/nginx/conf.d/
 
 systemctl enable --now nginx
+
+sleep 3
 
 #установка apache
 yum install -y httpd
 
 #настройка
 
-cp -u /root/Project_Otus/config/httpd.conf /etc/httpd/conf/
-cp -r /root/Project_Otus/config/www /var/www/
+\cp -u /root/Project_Otus/config/httpd.conf /etc/httpd/conf/
+\cp -r /root/Project_Otus/config/www /var/www/
 
 systemctl enable --now httpd
+
+sleep 3
 
 #установка mysql
 
@@ -52,6 +56,8 @@ sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
 yum --enablerepo=mysql80-community install mysql-community-server
 
 systemctl enable --now mysqld
+
+sleep 10
 
 #настройка
 
@@ -77,7 +83,7 @@ send \"y\r\"
 expect eof
 ")
 
-cp -u /root/Project_Otus/config/my.cnf /etc/
+\cp -u /root/Project_Otus/config/my.cnf /etc/
 
 systemctl restart mysqld
 
@@ -124,22 +130,22 @@ chown prometheus:prometheus /var/lib/prometheus
 
 tar -zxvf prometheus-2.17.1.linux-amd64.tar.gz
 
-cp -u prometheus-2.17.1.linux-amd64/prometheus /usr/local/bin/
-cp -u prometheus-2.17.1.linux-amd64/promtool /usr/local/bin/
+\cp -u prometheus-2.17.1.linux-amd64/prometheus /usr/local/bin/
+\cp -u prometheus-2.17.1.linux-amd64/promtool /usr/local/bin/
 
 chown prometheus:prometheus /usr/local/bin/prometheus
 chown prometheus:prometheus /usr/local/bin/promtool
 chmod -R 700 /usr/local/bin/prometheus
 chmod -R 700 /usr/local/bin/promtool
 
-cp -u prometheus-2.17.1.linux-amd64/consoles /etc/prometheus
-cp -u prometheus-2.17.1.linux-amd64/console_libraries /etc/prometheus
-cp -u prometheus-2.17.1.linux-amd64/prometheus.yml /etc/prometheus
+\cp -u prometheus-2.17.1.linux-amd64/consoles /etc/prometheus
+\cp -u prometheus-2.17.1.linux-amd64/console_libraries /etc/prometheus
+\cp -u prometheus-2.17.1.linux-amd64/prometheus.yml /etc/prometheus
 chown -R prometheus:prometheus /etc/prometheus/consoles
 chown -R prometheus:prometheus /etc/prometheus/console_libraries
 chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
 
-cp -u /root/Project_Otus/config/prometheus.service /etc/systemd/system/
+\cp -u /root/Project_Otus/config/prometheus.service /etc/systemd/system/
 
 wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
 
@@ -148,10 +154,15 @@ mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
 chown prometheus:prometheus /usr/local/bin/node_exporter/
 chmod -R 700 /usr/local/bin/node_exporter/
 
-cp -u /root/Project_Otus/config/node_exporter.service /etc/systemd/system/
+\cp -u /root/Project_Otus/config/node_exporter.service /etc/systemd/system/
 
 systemctl enable --now prometheus
+
+sleep 3
+ 
 systemctl enable --now node_exporter
+
+sleep 3
 
 #установка elk
 
@@ -160,18 +171,27 @@ yum install -y java-openjdk-devel java-openjdk
 cd /root/rpms
 rpm -i *.rpm
 
-cp -u /root/Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/
+\cp -u /root/Project_Otus/config/jvm.options /etc/elasticsearch/jvm.options.d/
 systemctl enable --now elasticsearch.service
 
-cp -u /root/Project_Otus/config/kibana.yml /etc/kibana/
+sleep 10
+
+\cp -u /root/Project_Otus/config/kibana.yml /etc/kibana/
 systemctl enable --now kibana
 
-cp -u /root/Project_Otus/config/logstash.yml /etc/logstash/
-cp -u /root/Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/
+sleep 3
+
+\cp -u /root/Project_Otus/config/logstash.yml /etc/logstash/
+\cp -u /root/Project_Otus/config/logstash-nginx-es.conf /etc/logstash/conf.d/
 
 systemctl restart logstash.service
 
-cp -u /root/Project_Otus/config/filebeat.yml /etc/filebeat/
+sleep 3
+
+\cp -u /root/Project_Otus/config/filebeat.yml /etc/filebeat/
 
 systemctl enable --now filebeat
+
+sleep 3
+
 systemctl restart nginx
