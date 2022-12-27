@@ -21,8 +21,8 @@ yum install -y yum-utils rpm wget tar nano mc git expect sshpass
 git clone git@github.com:alleksus/Project_Otus.git
 
 #установка mysql на slave
-sshpass -p $Pass $User@$Slave_Host 'bash -s' < /Project_Otus/slave.sh
-exit
+#sshpass -p $Pass $User@$Slave_Host 'bash -s' < /Project_Otus/slave.sh
+#exit
 
 #установка nginx
 yum install -y epel-release 
