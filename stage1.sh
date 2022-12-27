@@ -44,17 +44,17 @@ expect "New password:"
 send "$Pass\r"
 expect "Re-enter new password:"
 send "$Pass\r"
-expect "*:"
+expect "Change the password for root ?*"
 send "n\r"
-expect "*:"
+expect "Do you wish to continue with the password provided?*"
 send "y\r"
-expect "*:"
+expect "Remove anonymous users?*"
 send "y\r"
-expect "*:"
+expect "Disallow root login remotely?*"
 send "n\r"
-expect "*:"
+expect "Remove test database and access to it?*"
 send "y\r"
-expect "*:"
+expect "Reload privilege tables now?*"
 send "y\r"
 expect eof
 ")
@@ -65,3 +65,4 @@ echo "$SECURE_MYSQL"
 chmod -R 755 /var/lib/mysql/
 
 systemctl restart mysqld
+
