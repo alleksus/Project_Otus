@@ -132,9 +132,9 @@ chown prometheus:prometheus /usr/local/bin/promtool
 chmod -R 700 /usr/local/bin/prometheus
 chmod -R 700 /usr/local/bin/promtool
 
-cp -r prometheus-2.17.1.linux-amd64/consoles /etc/prometheus
-cp -r prometheus-2.17.1.linux-amd64/console_libraries /etc/prometheus
-cp -r prometheus-2.17.1.linux-amd64/prometheus.yml /etc/prometheus
+cp -u prometheus-2.17.1.linux-amd64/consoles /etc/prometheus
+cp -u prometheus-2.17.1.linux-amd64/console_libraries /etc/prometheus
+cp -u prometheus-2.17.1.linux-amd64/prometheus.yml /etc/prometheus
 chown -R prometheus:prometheus /etc/prometheus/consoles
 chown -R prometheus:prometheus /etc/prometheus/console_libraries
 chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
