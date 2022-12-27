@@ -63,7 +63,4 @@ expect eof
 
 echo "$SECURE_MYSQL"
 
-echo "$SECURE_MYSQL"
-echo "$SECURE_MYSQL"
-
 systemctl restart mysqld
