@@ -34,25 +34,25 @@ systemctl status mysqld
 
 root_temp_pass=$(grep "A temporary password" /var/log/mysqld.log)
 echo "root_temp_pass: "$root_temp_pass
-secure_mysql=$(expect -c "
-set timeout 1
-spawn mysql_secure_installation "-u$User" "-p#$root_temp_pass"
-expect \"New password:\"
-send \"$Pass\"
-expect \"Re-enter new password:\"
-send \"$Pass\"
+SECURE_MYSQL=$(expect -c "
+set timeout 10
+spawn mysql_secure_installation
+expect \"Enter current password for root (enter for none):\"
+send \"$Pass\r\"
 expect \"Change the root password?\"
-send \"n\"
+send \"n\r\"
 expect \"Remove anonymous users?\"
-send \"y\"
-expect \"Disable root login remotely?\"
-send \"n\"
+send \"y\r\"
+expect \"Disallow root login remotely?\"
+send \"y\r\"
 expect \"Remove test database and access to it?\"
-send \"y\"
-expect \"Remove privilege tables now?\"
-send \"y\"
+send \"y\r\"
+expect \"Reload privilege tables now?\"
+send \"y\r\"
 expect eof
 ")
+
+echo "$SECURE_MYSQL"
 
 \cp -u /root/Project_Otus/config/my.cnf /etc/
 
