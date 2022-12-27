@@ -38,24 +38,17 @@ MYSQL=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $13}')
 SECURE_MYSQL=$(expect -c "
 set timeout 10
 spawn mysql_secure_installation
-expect "Enter password for user root:"
-send "$MYSQL\r"
-expect "New password:"
-send "$Pass\r"
-expect "Re-enter new password:"
-send "$Pass\r"
-expect "Change the password for root ?*"
-send "n\r"
-expect "Do you wish to continue with the password provided?*"
-send "y\r"
-expect "Remove anonymous users?*"
-send "y\r"
-expect "Disallow root login remotely?*"
-send "n\r"
-expect "Remove test database and access to it?*"
-send "y\r"
-expect "Reload privilege tables now?*"
-send "y\r"
+expect {
+             "Enter password for user root:" { send -- "$MYSQL\r" }
+             "New password:" { send -- "$Pass\r" }
+             "Re-enter new password:" { send -- "$Pass\r" }
+             "Change the password for root ? ((Press y|Y for Yes, any other key for No) :" { send -- "n\r" }
+			 "Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
+             "Remove anonymous users? (Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
+			 "Disallow root login remotely? (Press y|Y for Yes, any other key for No) :" { send -- "n\r" }
+             "Remove test database and access to it? (Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
+             "Reload privilege tables now? (Press y|Y for Yes, any other key for No) :" { send -- "y\r" }
+        }
 expect eof
 ")
 
