@@ -1,7 +1,7 @@
 #!/bin/bash
 
 User=root
-Pass=Otus2022
+Pass=Otus_2022
 MYSQL=/usr/bin/mysql
 DUMP="/tmp/$DB-export.sql"
 Master_Host=192.168.136.7
@@ -35,10 +35,14 @@ systemctl status mysqld
 root_temp_pass=$(grep "A temporary password" /var/log/mysqld.log)
 echo "root_temp_pass: "$root_temp_pass
 SECURE_MYSQL=$(expect -c "
-set timeout 10
+set timeout 1
 spawn mysql_secure_installation
-expect \"Enter current password for root (enter for none):\"
+expect \"Enter password for user root:\"
+send \"$root_temp_pass\r\"
+expect \"New password:\"
 send \"$Pass\r\"
+expect \"Re-enter new password:\"
+send \"$Pass\"
 expect \"Change the root password?\"
 send \"n\r\"
 expect \"Remove anonymous users?\"

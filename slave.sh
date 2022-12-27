@@ -1,7 +1,7 @@
 #!binbash
 
 User=root
-Pass=Otus2022
+Pass=Otus_2022
 DUMP="/tmp/$DB-export.sql"
 
 # установка доп ПО
