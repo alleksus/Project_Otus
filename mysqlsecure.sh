@@ -1,4 +1,4 @@
-#!/usr/bin/expect -f
+#!/bin/bash
 
 User=root
 Pass=Otus_2022
