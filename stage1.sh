@@ -26,9 +26,10 @@ yum --enablerepo=mysql80-community install mysql-community-server
 
 sleep 5
 
-systemctl enable --now mysqld
+systemctl start mysqld
+systemctl enable mysqld
 
-sleep 15
+sleep 5
 
 systemctl status mysqld
 
