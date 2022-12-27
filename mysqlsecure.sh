@@ -9,6 +9,8 @@ Slave_Host=192.168.136.8
 
 MYSQL=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $13}')
 
+spawn  mysql_secure_installation
+
 expect {
              "Enter password for user root:" { send "$MYSQL\r"; exp_continue }
              "New password:" { send "$Pass\r"; exp_continue }
