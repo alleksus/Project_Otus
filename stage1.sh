@@ -20,41 +20,6 @@ yum install -y yum-utils rpm wget tar nano mc git expect sshpass
 # клонирование репозитория
 git clone git@github.com:alleksus/Project_Otus.git
 
-#установка mysql на slave
-#sshpass -p $Pass $User@$Slave_Host 'bash -s' < /Project_Otus/slave.sh
-#exit
-
-#установка nginx
-yum install -y epel-release 
-yum install -y nginx 
-
-#настройка
-
-\cp -u /root/Project_Otus/config/nginx.conf /etc/nginx/
-\cp -u /root/Project_Otus/config/default.conf /etc/nginx/conf.d/
-
-systemctl enable --now nginx
-
-sleep 5
-
-systemctl status nginx
-
-#установка apache
-yum install -y httpd
-
-#настройка
-
-\cp -u /root/Project_Otus/config/httpd.conf /etc/httpd/conf/
-\cp -r /root/Project_Otus/config/www /var/www/
-
-systemctl enable --now httpd
-
-sleep 5
-
-systemctl status httpd
-
-#установка mysql
-
 rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
 yum --enablerepo=mysql80-community install mysql-community-server
@@ -71,19 +36,19 @@ secure_mysql=$(expect -c "
 set timeout 1
 spawn mysql_secure_installation "-u$User" "-p#$root_temp_pass"
 expect \"New password:\"
-send \"$Pass\r\"
+send \"$Pass\"
 expect \"Re-enter new password:\"
-send \"$Pass\r\"
+send \"$Pass\"
 expect \"Change the root password?\"
-send \"n\r\"
+send \"n\"
 expect \"Remove anonymous users?\"
-send \"y\r\"
+send \"y\"
 expect \"Disable root login remotely?\"
-send \"n\r\"
+send \"n\"
 expect \"Remove test database and access to it?\"
-send \"y\r\"
+send \"y\"
 expect \"Remove privilege tables now?\"
-send \"y\r\"
+send \"y\"
 expect eof
 ")
 
