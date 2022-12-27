@@ -21,7 +21,7 @@ yum install -y yum-utils rpm wget tar nano mc git expect
 git clone git@github.com:alleksus/Project_Otus.git
 
 #установка mysql на slave
-sshpass -p $Pass $User@$Slave_Host 'bash -s' < /Project_Otus/slave.sh &
+sshpass -p $Pass $User@$Slave_Host 'bash -s' < /Project_Otus/slave.sh
 exit
 
 #установка nginx
@@ -78,7 +78,6 @@ expect eof
 ")
 
 cp Project_Otus/config/my.cnf /etc/
-scp Project_Otus/config/slave_my.cnf $Slave_Host:config/my.cnf
 
 systemctl restart mysqld
 
@@ -174,33 +173,3 @@ cp Project_Otus/config/filebeat.yml /etc/filebeat/filebeat.yml
 
 systemctl enable --now filebeat
 systemctl restart nginx
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
