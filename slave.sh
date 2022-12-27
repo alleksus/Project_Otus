@@ -1,4 +1,4 @@
-﻿#!binbash
+#!binbash
 
 User=root
 Pass=Otus2022
@@ -43,7 +43,7 @@ scp root@192.168.136.7:Project_Otus/config/slave_my.cnf /etc/my.cnf
 
 systemctl restart mysqld
 
-sleep 10s
+sleep 10
 
 mysql "-u$User" "-p$Pass" -e "CREATE USER root@'%' IDENTIFIED BY 'Otus2022';"
 mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
