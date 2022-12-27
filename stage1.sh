@@ -24,6 +24,8 @@ rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
 yum --enablerepo=mysql80-community install mysql-community-server
 
+sleep 5
+
 systemctl enable --now mysqld
 
 sleep 15
@@ -33,6 +35,8 @@ systemctl status mysqld
 #настройка
 
 root_temp_pass=$(grep "A temporary password" /var/log/mysqld.log)
+
+echo "root_temp_pass: "$root_temp_pass
 
 SECURE_MYSQL=$(expect -c "
 set timeout 1
