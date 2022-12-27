@@ -15,7 +15,7 @@ systemctl restart firewalld
 
 # установка доп ПО
 setenforce 0
-yum install -y yum-utils rpm wget tar nano mc git expect
+yum install -y yum-utils rpm wget tar nano mc git expect sshpass
 
 # клонирование репозитория
 git clone git@github.com:alleksus/Project_Otus.git
