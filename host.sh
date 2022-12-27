@@ -101,7 +101,7 @@ mysql "-u$User" "-p$Pass" $DB < $DUMP
 
 mysql "-u$User" "-p$Pass" -e "STOP SLAVE; CHANGE MASTER TO MASTER_HOST='$Master_Host', MASTER_USER='$User', MASTER_PASSWORD='$Pass', MASTER_LOG_FILE='$Log_File', MASTER_LOG_POS='$Log_Pos'; START SLAVE;"
 
-exit
+#exit
 
 systemctl restart mysqld
 
