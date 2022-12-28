@@ -20,9 +20,9 @@ yum install -y yum-utils rpm wget tar nano mc git expect sshpass
 # клонирование репозитория
 git clone git@github.com:alleksus/Project_Otus.git
 
-rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
-sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
-yum --enablerepo=mysql80-community install mysql-community-server
+wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm 
+yum localinstall mysql57-community-release-el7-11.noarch.rpm
+yum install mysql-community-server
 
 systemctl start mysqld
 systemctl enable mysqld
@@ -44,17 +44,17 @@ expect "New password:"
 send "$Pass\r"
 expect "Re-enter new password:"
 send "$Pass\r"
-expect "Change the password for root ?"
+expect "Change the password for root ? ((Press y|Y for Yes, any other key for No) :"
 send "n\r"
-expect "Do you wish to continue with the password provided?"
+expect "Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) :"
 send "y\r"
-expect "Remove anonymous users?"
+expect "Remove anonymous users? (Press y|Y for Yes, any other key for No) :"
 send "y\r"
-expect "Disallow root login remotely?"
+expect "Disallow root login remotely? (Press y|Y for Yes, any other key for No) :"
 send "n\r"
-expect "Remove test database and access to it?"
+expect "Remove test database and access to it? (Press y|Y for Yes, any other key for No) :"
 send "y\r"
-expect "Reload privilege tables now?"
+expect "Reload privilege tables now? (Press y|Y for Yes, any other key for No) :"
 send "y\r"
 expect eof
 ")
