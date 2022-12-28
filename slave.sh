@@ -16,6 +16,8 @@ Master_Status=$(cat /tmp/binlog.txt)
 Log_File=$(echo $Master_Status |cut -f1 -d ' ')
 Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
 
-mysql "-u$User" "-p$Pass" -e "STOP SLAVE; CHANGE MASTER TO MASTER_HOST='$Master_Host', MASTER_USER='repl', MASTER_PASSWORD='oTUSlave#2020', MASTER_LOG_FILE='$Log_File', MASTER_LOG_POS=$Log_Pos; START SLAVE;"
+mysql "-u$User" "-p$Pass" -e "STOP SLAVE;" 
+mysql "-u$User" "-p$Pass" -e "CHANGE MASTER TO MASTER_HOST='$Master_Host', MASTER_USER='repl', MASTER_PASSWORD='oTUSlave#2020', MASTER_LOG_FILE='$Log_File', MASTER_LOG_POS=$Log_Pos, GET_MASTER_PUBLIC_KEY = 1;" 
+mysql "-u$User" "-p$Pass" -e "START SLAVE;"
 
 systemctl restart mysqld
