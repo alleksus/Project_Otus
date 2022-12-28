@@ -3,6 +3,8 @@
 User=root
 Pass=Otus_2022
 DUMP="/tmp/mysql_dump.sql"
+Master_Host=192.168.136.7
+Slave_Host=192.168.136.8
 
 scp root@192.168.136.7:/tmp/binlog.txt /tmp/binlog.txt
 scp root@192.168.136.7:/root/Project_Otus/config/slave_my.cnf /etc/my.cnf
