@@ -11,7 +11,7 @@ Master_Status=$(mysql "-u$User" "-p$Pass" -ANe "SHOW MASTER STATUS;" | awk '{pri
 Log_File=$(echo $Master_Status |cut -f1 -d ' ')
 Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
 
-sshpass -p Otus2022 ssh $User@$Slave_Host
+sshpass -p Otus2022 ssh $User@$Slave_Host <<EOF
 
 # установка доп ПО
 firewall-cmd --permanent --add-port=3306
@@ -52,6 +52,7 @@ mysql "-u$User" "-p$Pass" -e "STOP SLAVE; CHANGE MASTER TO MASTER_HOST='$Master_
 
 systemctl restart mysqld
 
+EOF
 
 
 
