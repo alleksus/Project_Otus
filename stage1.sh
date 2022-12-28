@@ -35,13 +35,11 @@ systemctl status mysqld
 
 MYSQL=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $13}')
 
-mysql --user=root --password=${MYSQL} --connect-expired-password<< EOFMYSQLSECURE
-UPDATE mysql.user SET Password = PASSWORD('Pass') WHERE User = 'root';
+mysql -uroot -p$MYSQL --connect-expired-password -e "UPDATE mysql.user SET Password = PASSWORD('$Pass') WHERE User = 'root';
 DELETE FROM mysql.user WHERE User='';
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
-FLUSH PRIVILEGES;
-EOFMYSQLSECURE
+FLUSH PRIVILEGES;"
 
 \cp -u /root/Project_Otus/config/my.cnf /etc/
 chmod -R 755 /var/lib/mysql/
