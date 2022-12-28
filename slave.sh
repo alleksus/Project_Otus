@@ -2,7 +2,10 @@
 
 User=root
 Pass=Otus_2022
-DUMP="/tmp/$DB-export.sql"
+MYSQLDUMP=/usr/bin/mysqldump
+DUMP="/tmp/mysql_dump.sql"
+Master_Host=192.168.136.7
+Slave_Host=192.168.136.8
 
 # установка доп ПО
 firewall-cmd --permanent --add-port=3306
@@ -36,3 +39,9 @@ scp root@192.168.136.7:/root/Project_Otus/config/slave_my.cnf /etc/my.cnf
 chmod -R 755 /var/lib/mysql/
 
 scp root@192.168.136.7:$DUMP $DUMP
+
+mysql "-u$User" "-p$Pass" < $DUMP
+
+mysql "-u$User" "-p$Pass" -e "STOP SLAVE; CHANGE MASTER TO MASTER_HOST='$Master_Host', MASTER_USER='repl', MASTER_PASSWORD='oTUSlave#2020', MASTER_LOG_FILE='$Log_File', MASTER_LOG_POS='$Log_Pos'; START SLAVE;"
+
+systemctl restart mysqld
