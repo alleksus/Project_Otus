@@ -7,13 +7,9 @@ DUMP="/tmp/$DB_dump.sql"
 Master_Host=192.168.136.7
 Slave_Host=192.168.136.8
 
-mysql "-u$User" "-p$Pass" -e "CREATE USER repl@'%' IDENTIFIED WITH 'caching_sha2_password' BY 'oTUSlave#2020';"
-mysql "-u$User" "-p$Pass" -e "GRANT REPLICATION SLAVE ON *.* TO repl@'%';"
-mysql "-u$User" "-p$Pass" -e "CREATE DATABASE Otus;"
-
 mysql "-u$User" root "-p$Pass" -e "STOP SLAVE;"
 
-for DB in $(mysql -e 'show databases' -s --skip-column-names); do
+for DB in $(mysql "-u$User" "-p$Pass" --all-databases --events --routines --master-data=2); do
     mysqldump $DB > $DUMP;
 done
 
