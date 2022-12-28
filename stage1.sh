@@ -1,10 +1,9 @@
 #!/bin/bash
 
-cat /tmp/binlog.txt | while read y
+Master_Status=$(mysql "-u$User" "-p$Pass" -ANe "SHOW MASTER STATUS;" | awk '{print $1 " " $2}')
 
-do
-echo "Line contents are : $y "
-done
-
+cat <<EOF : tee /tmp/binlog.txt
+$Master_Status
+EOF
 
 
