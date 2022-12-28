@@ -49,13 +49,52 @@ systemctl restart mysqld
 mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
 mysql "-u$User" "-p$Pass" -e "CREATE DATABASE Otus;"
 
-mysqldump "-u$User" "-p$Pass" --opt $DB > $DUMP
+mysql "-u$User" root "-p$Pass" -e "STOP SLAVE;"
+mysql "-u$User" "-p$Pass" -e "SHOW DATABASES;"
+
+for db in $databases; do
+  mysqldump --events --routines --databases $db --master-data=2 "-u$User" "-p$Pass" | > $DUMP
+done
+
 Master_Status=$(mysql "-u$User" "-p$Pass" -ANe "SHOW MASTER STATUS;" | awk '{print $1 " " $2}')
 Log_File=$(echo $Master_Status |cut -f1 -d ' ')
 Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
 
-sshpass -p $Pass $User@$Slave_Host
-bash <(curl -Ls https://raw.githubusercontent.com/alleksus/Project_Otus/main/slave.sh)
+mysql "-u$User" root "-p$Pass" -e "START SLAVE;"
+
+sshpass -pOtus2022 $User@$Slave_Host
+# установка доп ПО
+firewall-cmd --permanent --add-port=3306
+systemctl restart firewalld
+yum install -y yum-utils rpm wget tar nano mc git expect
+
+#установка mysql slave server
+
+rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
+sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
+yum --enablerepo=mysql80-community install mysql-community-server
+
+systemctl start mysqld
+systemctl enable mysqld
+
+sleep 10
+
+systemctl status mysqld
+
+#настройка
+
+MYSQL=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $13}')
+
+mysql -uroot -p$MYSQL --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$Pass';
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;"
+
+scp root@192.168.136.7:/root/Project_Otus/config/slave_my.cnf /etc/my.cnf
+chmod -R 755 /var/lib/mysql/
+
+scp root@192.168.136.7:$DUMP $DUMP
 
 
 mysql "-u$User" "-p$Pass" -e "DROP DATABASE IF EXISTS $DB; CREAT DATABASE $DB;"
