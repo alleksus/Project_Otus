@@ -13,6 +13,13 @@ Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
 
 sshpass -p Otus2022 ssh $User@$Slave_Host <<EOF
 
+User=root
+Pass=Otus_2022
+MYSQLDUMP=/usr/bin/mysqldump
+DUMP="/tmp/mysql_dump.sql"
+Master_Host=192.168.136.7
+Slave_Host=192.168.136.8
+
 # установка доп ПО
 firewall-cmd --permanent --add-port=3306
 systemctl restart firewalld
