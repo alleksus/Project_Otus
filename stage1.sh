@@ -11,7 +11,9 @@ Master_Status=$(mysql "-u$User" "-p$Pass" -ANe "SHOW MASTER STATUS;" | awk '{pri
 Log_File=$(echo $Master_Status |cut -f1 -d ' ')
 Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
 
-sshpass -p Otus2022 ssh $User@$Slave_Host bash <(curl -Ls https://raw.githubusercontent.com/alleksus/Project_Otus/main/slave.sh)
+sshpass -p Otus2022 ssh $User@$Slave_Host <<EOF 
+bash <(curl -Ls https://raw.githubusercontent.com/alleksus/Project_Otus/main/slave.sh)
+EOF
 
 
 
