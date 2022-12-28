@@ -1,4 +1,4 @@
-#!binbash
+#!/bin/bash
 
 User=root
 Pass=Otus_2022
@@ -15,37 +15,24 @@ rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
 yum --enablerepo=mysql80-community install mysql-community-server
 
-systemctl enable --now mysqld
-
-root_temp_pass=$(grep "A temporary password" /var/log/mysqld.log)
-echo "root_temp_pass: "$root_temp_pass
-SECURE_MYSQL=$(expect -c "
-set timeout 10
-spawn mysql_secure_installation
-expect \"Enter current password for root (enter for none):\"
-send \"$Pass\r\"
-expect \"Change the root password?\"
-send \"n\r\"
-expect \"Remove anonymous users?\"
-send \"y\r\"
-expect \"Disallow root login remotely?\"
-send \"y\r\"
-expect \"Remove test database and access to it?\"
-send \"y\r\"
-expect \"Reload privilege tables now?\"
-send \"y\r\"
-expect eof
-")
-
-echo "$SECURE_MYSQL"
-
-scp root@192.168.136.7:Project_Otus/config/slave_my.cnf /etc/my.cnf
-
-systemctl restart mysqld
+systemctl start mysqld
+systemctl enable mysqld
 
 sleep 10
 
-mysql "-u$User" "-p$Pass" -e "CREATE USER root@'%' IDENTIFIED BY 'Otus2022';"
-mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
+systemctl status mysqld
+
+#настройка
+
+MYSQL=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $13}')
+
+mysql -uroot -p$MYSQL --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$Pass';
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;"
+
+scp root@192.168.136.7:/root/Project_Otus/config/slave_my.cnf /etc/my.cnf
+chmod -R 755 /var/lib/mysql/
 
 scp root@192.168.136.7:$DUMP $DUMP

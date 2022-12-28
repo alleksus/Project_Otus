@@ -46,3 +46,31 @@ chmod -R 755 /var/lib/mysql/
 
 systemctl restart mysqld
 
+mysql "-u$User" "-p$Pass" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
+mysql "-u$User" "-p$Pass" -e "CREATE DATABASE Otus;"
+
+mysqldump "-u$User" "-p$Pass" --opt $DB > $DUMP
+Master_Status=$(mysql "-u$User" "-p$Pass" -ANe "SHOW MASTER STATUS;" | awk '{print $1 " " $2}')
+Log_File=$(echo $Master_Status |cut -f1 -d ' ')
+Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
+
+sshpass -p $Pass $User@$Slave_Host
+bash <(curl -Ls https://raw.githubusercontent.com/alleksus/Project_Otus/main/slave.sh)
+
+
+mysql "-u$User" "-p$Pass" -e "DROP DATABASE IF EXISTS $DB; CREAT DATABASE $DB;"
+mysql "-u$User" "-p$Pass" $DB < $DUMP
+
+mysql "-u$User" "-p$Pass" -e "STOP SLAVE; CHANGE MASTER TO MASTER_HOST='$Master_Host', MASTER_USER='$User', MASTER_PASSWORD='$Pass', MASTER_LOG_FILE='$Log_File', MASTER_LOG_POS='$Log_Pos'; START SLAVE;"
+
+#exit
+
+systemctl restart mysqld
+
+sleep 10
+
+systemctl status mysqld
+
+exit
+
+
