@@ -1,20 +1,10 @@
 #!/bin/bash
 
-User=root
-Pass=Otus_2022
-MYSQLDUMP=/usr/bin/mysqldump
-DUMP="/tmp/mysql_dump.sql"
-Master_Host=192.168.136.7
-Slave_Host=192.168.136.8
+cat /tmp/binlog.txt | while read y
 
-Master_Status=$(mysql "-u$User" "-p$Pass" -ANe "SHOW MASTER STATUS;" | awk '{print $1 " " $2}')
-Log_File=$(echo $Master_Status |cut -f1 -d ' ')
-Log_Pos=$(echo $Master_Status |cut -f2 -d ' ')
-
-sshpass -p Otus2022 ssh $User@$Slave_Host <<EOF 
-bash <(curl -Ls https://raw.githubusercontent.com/alleksus/Project_Otus/main/slave.sh)
-EOF
-
+do
+echo "Line contents are : $y "
+done
 
 
 
