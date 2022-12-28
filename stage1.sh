@@ -22,7 +22,7 @@ yum install -y yum-utils rpm wget tar nano mc git expect
 
 rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
-yum --enablerepo=mysql80-community install mysql-community-server
+yum --enablerepo=mysql80-community -y install mysql-community-server
 
 systemctl start mysqld
 systemctl enable mysqld
