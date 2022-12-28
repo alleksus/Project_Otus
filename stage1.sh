@@ -35,7 +35,7 @@ systemctl status mysqld
 
 MYSQL=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $13}')
 
-mysql --user=root --password=${MYSQL} << EOFMYSQLSECURE
+mysql --user=root --password=${MYSQL} --connect-expired-password<< EOFMYSQLSECURE
 UPDATE mysql.user SET Password = PASSWORD('Pass') WHERE User = 'root';
 DELETE FROM mysql.user WHERE User='';
 DROP DATABASE IF EXISTS test;
